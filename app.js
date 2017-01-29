@@ -1,45 +1,15 @@
 var express = require("express");
 var bodyParser = require("body-parser");
 var mongoose = require("mongoose");
+var Campground = require("./models/campground");
+var seedDB = require("./seeds");
 var app = express();
 
 mongoose.connect("mongodb://localhost/yelp_camp");
 app.use(bodyParser.urlencoded({extended:true}));
 app.set("view engine", "ejs");
 
-///// SCHEMA SETUP
-var campgroundSchema = new mongoose.Schema({
-  name: String,
-  image: String,
-  description: String
-});
-
-var Campground = mongoose.model("Campground", campgroundSchema);
-
-// Campground.create(
-//   {
-//     name: "Salmon Creek",
-//     image: "https://farm8.staticflickr.com/7252/7626464792_3e68c2a6a5.jpg",
-//     description: "Lorem inspum"
-//   }, function(err, campground) {
-//     if (err) {
-//       console.log(err);
-//     } else {
-//       console.log("NEWLY CRATED CAMPGROUND :");
-//       console.log(campground);
-//     }
-//   }
-// );
-
-var campgrounds = [
-  {name: "Salmon Creek", image: "https://farm8.staticflickr.com/7252/7626464792_3e68c2a6a5.jpg"},
-  {name: "Granite Hill", image: "https://farm8.staticflickr.com/7252/7626464792_3e68c2a6a5.jpg"},
-  {name: "Moutain Goats Rest", image: "https://farm8.staticflickr.com/7252/7626464792_3e68c2a6a5.jpg"},
-  {name: "Calorica", image: "https://farm8.staticflickr.com/7252/7626464792_3e68c2a6a5.jpg"},
-  {name: "Moutain Hill", image: "https://farm8.staticflickr.com/7252/7626464792_3e68c2a6a5.jpg"},
-  {name: "Moutain Sail Roode", image: "https://farm8.staticflickr.com/7252/7626464792_3e68c2a6a5.jpg"},
-  {name: "Nicke Berlin", image: "https://farm8.staticflickr.com/7252/7626464792_3e68c2a6a5.jpg"}
-];
+seedDB();
 
 app.get("/", function(req, res) {
   res.render("landing");
@@ -74,7 +44,7 @@ app.get("/campgrounds/new", function(req, res) {
 });
 
 app.get("/campgrounds/:id", function(req, res) {
-  Campground.findById(req.params.id, function(err, foundCampground) {
+  Campground.findById(req.params.id).populate("comments").exec(function(err, foundCampground) {
     if (err) {
       console.log(err);
     } else {
