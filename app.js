@@ -33,7 +33,7 @@ app.set("view engine", "ejs");
 app.use(methodOverride("_method"));
 app.use(flash());
 // seed the database
-seedDB();
+// seedDB();
 
 // remove error on currentUser in header
 app.use(function(req, res, next) {
