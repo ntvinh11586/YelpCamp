@@ -26,7 +26,10 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-mongoose.connect(process.env.DATABASEURL);
+// mongoose.connect(process.env.DATABASEURL);
+// mongoose.connect("mongodb://vinh12345:12345@ds051534.mlab.com:51534/yelpcamp");
+mongoose.connect("mongodb://localhost/yelp_camp");
+
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(express.static(__dirname + "/public"));
 app.set("view engine", "ejs");
@@ -47,6 +50,10 @@ app.use("/", indexRoutes);
 app.use("/campgrounds", campgroundRoutes);
 app.use("/campgrounds/:id/comments", commentRoutes);
 
-app.listen(process.env.PORT, process.env.IP, function() {
+// app.listen(process.env.PORT, process.env.IP, function() {
+//   console.log("The YelpCamp Server Has Started!");
+// });
+
+app.listen(3000, function() {
   console.log("The YelpCamp Server Has Started!");
 });
